@@ -22,25 +22,25 @@
 @section('js')
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function(){
-        function uid() {
-            var token = "{{ csrf_token() }}";
-            $.ajax({
-                type: "GET",
-                url: "{{ route('getuid') }}",
-                async:false,
-                data: {
-                        "_token" : token,
-                        },
-                success:function(data){
-                    $('#uid').val(data);
-                }
-            });
-        }
-        setInterval(function () {
-            uid();
-        },500);
-    });
+    // $(document).ready(function(){
+    //     function uid() {
+    //         var token = "{{ csrf_token() }}";
+    //         $.ajax({
+    //             type: "GET",
+    //             url: "{{ route('getuid') }}",
+    //             async:false,
+    //             data: {
+    //                     "_token" : token,
+    //                     },
+    //             success:function(data){
+    //                 $('#uid').val(data);
+    //             }
+    //         });
+    //     }
+    //     setInterval(function () {
+    //         uid();
+    //     },500);
+    // });
 </script>
 
 @endsection()
