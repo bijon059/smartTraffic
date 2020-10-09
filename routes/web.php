@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'DataController@index')->name('login');
 Route::get('/signup', 'TrafficController@register')->name('register');
 
-Route::get('/rfidData', 'DataController@rfidData')->name('getuid');
 
-Route::get('/home', 'TrafficController@index')->name('index');
+Route::get('/traffic', 'TrafficController@index')->name('traffic');
+Route::get('/rfidData', 'TrafficController@rfidData')->name('getuid');
 
