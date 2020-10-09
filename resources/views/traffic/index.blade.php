@@ -268,6 +268,7 @@
 @section('js')
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+<<<<<<< HEAD
     $(document).ready(function(){
         // function uid() {
         //     var token = "{{ csrf_token() }}";
@@ -287,6 +288,27 @@
         //     uid();
         // },500);
     });
+=======
+    // $(document).ready(function(){
+    //     function uid() {
+    //         var token = "{{ csrf_token() }}";
+    //         $.ajax({
+    //             type: "GET",
+    //             url: "{{ route('getuid') }}",
+    //             async:false,
+    //             data: {
+    //                     "_token" : token,
+    //                     },
+    //             success:function(data){
+    //                 $('#uid').val(data);
+    //             }
+    //         });
+    //     }
+    //     setInterval(function () {
+    //         uid();
+    //     },500);
+    // });
+>>>>>>> 3c687df6040613f8208b337ee758bac9d3b6eb19
 </script>
 
 @endsection()
