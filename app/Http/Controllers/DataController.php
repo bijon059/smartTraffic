@@ -15,7 +15,7 @@ class DataController extends Controller
     public function rfidData()
     {
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', '192.168.43.36/smartTraffic/app/RFIDdata/UIDContainer.php');
+        $response = $client->request('POST', '192.168.43.155/smartTraffic/app/RFIDdata/UIDContainer.php');
         $uid = $response->getBody();
         //$uid=base64_decode($uid);
         //$data['uid']=$uid;

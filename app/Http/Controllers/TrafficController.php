@@ -10,4 +10,8 @@ class TrafficController extends Controller
     {
         return view('traffic.index');
     }
+    public function register()
+    {
+        return view('traffic.register');
+    }
 }
