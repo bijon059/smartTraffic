@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'DataController@index')->name('login');
 Route::get('/signup', 'TrafficController@register')->name('register');
 
 

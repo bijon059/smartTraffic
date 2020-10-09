@@ -16,7 +16,7 @@ class TrafficController extends Controller
         $response = $client->request('POST', '192.168.43.155/smartTraffic/app/RFIDdata/UIDContainer.php');
         $uid = $response->getBody();
         $uid=base64_decode($uid);
-        
+
         return $uid;
     }
     // Data Collection End

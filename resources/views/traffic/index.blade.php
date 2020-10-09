@@ -16,7 +16,7 @@
                         <button type="button" class="btn btn-danger" id="scan">Scan</button>
                     </div>
                     <!-- /btn-group -->
-                    <input type="text" class="form-control" placeholder="Press To Scan Your Card">
+                <input type="text" class="form-control" id="uid" >
                 </div>
 
             </form>
@@ -215,10 +215,7 @@
 @section('js')
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
-    $('#js-body').css('display','none');
-    $('#js-check-buttons').css('display','none');
-    $('#scan').on('click', function() {
-        function uid() {
+    function uid() {
             var token = "{{ csrf_token() }}";
             $.ajax({
                 type: "GET",
@@ -232,8 +229,12 @@
                 }
             });
         }
-    $('#js-body').css('display','block');
-    $('#js-check-buttons').css('display','block');
+    $('#js-body').css('display','none');
+    $('#js-check-buttons').css('display','none');
+    $('#scan').on('click', function() {
+        uid();
+        $('#js-body').css('display','block');
+        $('#js-check-buttons').css('display','block');
     });
 </script>
 
