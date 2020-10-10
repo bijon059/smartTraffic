@@ -1,5 +1,5 @@
 
-<footer class="main-footer fixed-bottom">
+<footer class="main-footer fixed-bottom" style="margin-top: 25px;">
     <div class="copyright bg-white">
         <p>
             &copy; <span id="copy-year">2019</span> Copyright Sleek Dashboard Bootstrap Template by

@@ -24,16 +24,52 @@ class TrafficController extends Controller
     {
 
         $rfid = $this->rfidData();
-        $data['riders'] = Rider::where('rfid',$rfid)->get()->first();
+        $data['rider'] = Rider::where('rfid',$rfid)->get()->first();
         $data['cases']  = Logs::join('cases', 'logs.case_id', '=', 'cases.id')
-                        ->where('rider_id',$data['riders']->id)
+                        ->where('rider_id',$data['rider']->id)
                         ->with('cases')
                         ->get();
 
+        return $data;
+                    }
+    public function riderRegister()
+    {
+
+        return view('traffic.riderRegister');
+    }
+
+    public function showIndex()
+    {
+        $data['cases']=Cases::get();
         return view('traffic.index', $data);
     }
-    public function register()
+
+    public function insertFromTraffic(Request $request)
     {
-        return view('traffic.register');
+        $cases = explode(",",$request->cases_id);
+
+        for ($i = 0; $i < count($cases); $i++) {
+            $log = new Logs;
+            $log->case_id = $cases[$i];
+            $log->traffic_id = $request->traffic_id;
+            $log->rider_id = $request->rider_id;
+
+            $log->save();
+
+            $rider = Rider::find($request->rider_id);
+            $rider->case_status = 1;
+            $rider->check_status = 1;
+            $rider->save();
+        }
+
+        $rfid = $this->rfidData();
+        $data['rider'] = Rider::where('rfid',$rfid)->get()->first();
+        $data['cases']  = Logs::join('cases', 'logs.case_id', '=', 'cases.id')
+                        ->where('rider_id',$data['rider']->id)
+                        ->with('cases')
+                        ->get();
+
+
+        return view('traffic.casesPage', $data);
     }
 }

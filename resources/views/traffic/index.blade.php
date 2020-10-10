@@ -1,7 +1,7 @@
 @extends('master.master')
 @section('content')
 
-<div class="container" style="margin-bottom: 150px;">
+<div class="container">
 
     <div class="row">
         <!-- scan rfid section -->
@@ -16,7 +16,7 @@
                         <button type="button" class="btn btn-danger" id="scan">Scan</button>
                     </div>
                     <!-- /btn-group -->
-                <input type="text" class="form-control" id="uid" >
+                    <input type="text" class="form-control" id="uid">
                 </div>
 
             </form>
@@ -24,23 +24,16 @@
         <!-- checking section -->
         <div class="col-sm-6" id="js-check-buttons">
             <div class="row">
-                @if(!empty($riders))
                 <div class="col-sm-4">
-                    <button type="button" style="margin-top: 25px; margin-left= 15px;" class="btn btn-block {{ ($riders->check_status == 1) ? 'btn-success' : 'btn-danger' }}">
-                        {{ ($riders->check_status == 1) ? 'Checked' : 'Not Checked' }}
+                    <button type="button" style="margin-top: 25px; margin-left= 15px;" class="btn btn-block"
+                        id="check-status">
                     </button>
                 </div>
                 <div class="col-sm-4">
 
-                    <button type="button" style="margin-top: 25px;" class="btn btn-block {{ ($riders->check_status == 1) ? 'btn-warning' : 'btn-success' }}">{{ ($riders->check_status == 1) ? 'Has case' : 'No case' }}</button>
+                    <button type="button" style="margin-top: 25px;" class="btn btn-block" id="check-case"
+                        data-toggle="modal" data-target="#modal-default"></button>
 
-                </div>
-                @endif
-                <div class="col-sm-4">
-
-                    <div class="col-sm-8" style="margin-top: 32px;">
-
-                    </div>
                 </div>
 
 
@@ -48,11 +41,9 @@
         </div>
     </div>
     <div id="js-body">
-        @if($riders->check_status == 1)
         <div class="success">
-            <p><i>Last checked at {{ $riders->last_checking_time }} </i></p>
+            <p><i id="note"></i></p>
         </div>
-        @endif
         <!-- profile info starts here -->
         <div class="row">
             <div class="col-sm-8">
@@ -74,74 +65,70 @@
                                         <tbody style="text-align: left;">
                                             <tr>
                                                 <td>Name:</td>
-                                                <td>{{ $riders->first_name }} {{$riders->last_name}}</td>
+                                                <td id="rider-name"></td>
 
                                             </tr>
 
                                             <tr>
                                                 <td>Mobile:</td>
-                                                <td>{{ $riders->mobile }}</td>
+                                                <td id="rider-mobile"></td>
 
                                             </tr>
 
                                             <tr>
                                                 <td>NID No:</td>
-                                                <td>{{ $riders->nid_no }}</td>
+                                                <td id="rider-nid"></td>
 
                                             </tr>
 
                                             <tr>
                                                 <td>Driving License No:</td>
-                                                <td>{{ $riders->driving_license_no }}</td>
+                                                <td id="rider-dl-no"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Driving License Validity:</td>
-                                                <td>{{ $riders->driving_license_validity }}</td>
+                                                <td id="rider-dl-vld"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Vehicle License No:</td>
-                                                <td>{{ $riders->vehicle_license_no }}</td>
+                                                <td id="rider-vl-no"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Vehicle License Validity:</td>
-                                                <td>{{ $riders->vehicle_validity }}</td>
+                                                <td id="rider-vl-vld"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Engine No:</td>
-                                                <td>{{ $riders->engine_no }}</td>
+                                                <td id="rider-en-no"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Chesis No:</td>
-                                                <td>{{ $riders->chesis_no }}</td>
+                                                <td id="rider-chs-no"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Insurance No:</td>
-                                                <td>{{ $riders->insurance_no }}</td>
+                                                <td id="rider-ins-no"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>Insurance Validity:</td>
-                                                <td>{{ $riders->insurance_validity }}</td>
+                                                <td id="rider-ins-vld"></td>
                                             </tr>
 
-                                            @if($riders->email != '')
                                             <tr>
                                                 <td>Email</td>
-                                                <td>{{ $riders->email }}</td>
+                                                <td id="rider-email"></td>
                                             </tr>
-                                            @endif
-                                            @if($riders->address != '')
                                             <tr>
                                                 <td>Address</td>
-                                                <td>{{ $riders->address }}</td>
+                                                <td id="rider-address"></td>
                                             </tr>
-                                            @endif
 
                                         </tbody>
                                     </table>
@@ -149,7 +136,8 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <img class="d-block w-100" style="height: 250px;border-radius:15px;" src="{{ asset('bi-05 300X300.jpg') }}" alt="Third slide">
+                                <img class="d-block w-100" style="height: 250px;border-radius:15px;"
+                                    src="{{ asset('bi-05 300X300.jpg') }}" alt="Third slide">
                             </div>
 
 
@@ -174,19 +162,7 @@
                                         <thead>
 
                                         </thead>
-                                        <tbody style="text-align: left;">
-
-                                            @foreach($cases as $case)
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" id="remember">
-                                                    </div>
-                                                </td>
-                                                <td>{{ $case->name }}</td>
-
-                                            </tr>
-                                            @endforeach
+                                        <tbody style="text-align: left; overflow-y:scroll; max-height: 200px" id="cases-tr">
 
                                         </tbody>
                                     </table>
@@ -207,6 +183,69 @@
 
 </div>
 
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Default Modal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{-- modal start --}}
+            <div class="modal-body">
+                <div>
+                    <table class="table table">
+                        <thead>
+                            <th>#</th>
+                            <th>Case Name</th>
+                            <th>Case Fees</th>
+                            <th>Duration</th>
+                        </thead>
+                        <tbody style="text-align: left;" id="">
+                        <form action="{{ route('insert.traffic') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="traffic_id" value="9">
+                                <input type="hidden" name="rider_id" id="rider_id" value="">
+                                <input type="hidden" name="cases_id" id="cases_id" value="">
+                                @foreach ($cases as $case)
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="cases-js" name="case_id" value="{{ $case->id }}">
+                                    </td>
+                                    <td>
+                                        {{ $case->name }}
+                                    </td>
+                                    <td>
+                                        {{ $case->fee }}
+
+                                    </td>
+                                    <td>
+                                        {{ $case->expiration_date }}
+
+                                    </td>
+                                </tr>
+                                @endforeach
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="float: right;">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submit">Submit Case</button>
+            </div>
+        </form>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
 
 
@@ -215,8 +254,10 @@
 @section('js')
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+    $('#js-body').css('display','none');
+
+    var token = "{{ csrf_token() }}";
     function uid() {
-            var token = "{{ csrf_token() }}";
             $.ajax({
                 type: "GET",
                 url: "{{ route('getuid') }}",
@@ -229,13 +270,84 @@
                 }
             });
         }
-    $('#js-body').css('display','none');
-    $('#js-check-buttons').css('display','none');
     $('#scan').on('click', function() {
+        $('#cases-tr').text('');
         uid();
-        $('#js-body').css('display','block');
-        $('#js-check-buttons').css('display','block');
+
+            $.ajax({
+                type: "GET",
+                url: "{{ route('traffic') }}",
+                async: false,
+                data: {
+                    "_token": token,
+                },
+                success: function(data) {
+                    $('#js-body').css('display','block');
+                        if (data.rider.check_status == 1) {
+                            $('#check-status').text('Checked');
+                            $('#check-status').addClass('btn-success');
+                            $('#note').text('Checked at: '+data.rider.last_checking_time);
+                        } else {
+                            $('#check-status').text('Not checked');
+                            $('#check-status').addClass('btn-danger');
+                            $('#note').text('Checked at: '+data.rider.last_checking_time);
+                        }
+                        if (data.rider.case_status !=0) {
+                            $('#check-case').text('Cased');
+                            $('#check-case').addClass('btn-warning');
+                        } else {
+                            $('#check-case').text('No cases');
+                            $('#check-case').addClass('btn-success');
+                        }
+                        $('#rider-name').text(data.rider.first_name+' '+data.rider.last_name);
+                        $('#rider-mobile').text(data.rider.mobile);
+                        $('#rider-nid').text(data.rider.nid_no);
+                        $('#rider-dl-no').text(data.rider.driving_license_no);
+                        $('#rider-dl-vld').text(data.rider.driving_license_validity);
+                        $('#rider-vl-no').text(data.rider.vehicle_license_no);
+                        $('#rider-vl-vld').text(data.rider.vehicle_validity);
+                        $('#rider-en-no').text(data.rider.engine_no);
+                        $('#rider-chs-no').text(data.rider.chesis_no);
+                        $('#rider-ins-no').text(data.rider.insurance_no);
+                        $('#rider-ins-vld').text(data.rider.insurance_validity);
+                        $('#rider-email').text(data.rider.email);
+                        $('#rider-address').text(data.rider.address);
+                        $('#rider_id').val(data.rider.id);
+                        $('#cases-tr').append('');
+                        if (data.rider.case_status !=0){
+                            $(data.cases).each(function(index, value){
+                                var html = '';
+                                html += '<tr><td><div class="icheck-primary"><input type="checkbox"><span>'+ value.cases[0]['name'] +'</span></div></td></tr>';
+                                $('#cases-tr').append(html);
+                            });
+                        } else {
+                            $('#cases-tr').text('No cases found...');
+                        }
+                }
+            });
     });
+    var case_id = [];
+        $('input[type="checkbox"]').on('click', function() {
+
+                if ($(this).prop("checked") == true) {
+
+                    case_id.push($(this).val());
+
+                } else if ($(this).prop("checked") == false) {
+                    for (var i = 0; 1<case_id.length; i++){
+                        if (case_id[i] == $(this).val()) {
+                            case_id.splice(i, $(this).val());
+                        }
+                    }
+                }
+            });
+
+            $('#submit').on('click', function() {
+                console.log(case_id.toString());
+                $('#cases_id').val(case_id.toString());
+
+            });
+
 </script>
 
 @endsection()

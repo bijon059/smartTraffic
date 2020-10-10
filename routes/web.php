@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/signup', 'TrafficController@register')->name('register');
+Route::get('/ridersignup', 'TrafficController@riderRegister')->name('ridersignup');
 
 
-Route::get('/traffic', 'TrafficController@index')->name('traffic');
+Route::get('/', 'TrafficController@index')->name('traffic');
+Route::get('/traffic', 'TrafficController@showIndex')->name('index');
+Route::post('/trafficInsert', 'TrafficController@insertFromTraffic')->name('insert.traffic');
 Route::get('/rfidData', 'TrafficController@rfidData')->name('getuid');
 
